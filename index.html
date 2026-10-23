@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="canary">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NEO-CALC // Neubrutalist Calculator</title>
+  <meta name="description" content="A bold, tactile Neubrutalism calculator with interactive sound effects, calculation history tape, memory functions, and custom themes.">
+  <meta name="keywords" content="calculator, neubrutalism, new brutalism, neo brutalism design, web calculator, tactile calculator">
+  <!-- Google Fonts: Space Grotesk & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Ambient Graphic Elements -->
+  <div class="bg-pattern" aria-hidden="true"></div>
+  <div class="floating-badge badge-1" aria-hidden="true">★ BOLD & TACTILE ★</div>
+  <div class="floating-badge badge-2" aria-hidden="true">100% ACCURATE ⚡</div>
+
+  <div class="page-container">
+    <!-- Header / Brand Bar -->
+    <header class="app-header">
+      <div class="brand-title">
+        <span class="brand-icon">🧮</span>
+        <h1>NEO-CALC<span class="version-tag">v2.0</span></h1>
+      </div>
+      <div class="header-controls">
+        <!-- Sound Toggle -->
+        <button id="soundToggle" class="neo-btn sm-btn sound-btn" title="Toggle Sound Feedback (Mute/Unmute)" aria-label="Toggle Sound">
+          <span class="icon" id="soundIcon">🔊</span>
+          <span class="label">FX: <strong id="soundStatus">ON</strong></span>
+        </button>
+
+        <!-- Theme Picker -->
+        <div class="theme-dropdown-wrapper">
+          <button id="themeDropdownBtn" class="neo-btn sm-btn theme-btn" aria-haspopup="true" aria-expanded="false" title="Switch Theme">
+            <span class="icon">🎨</span>
+            <span class="label" id="currentThemeLabel">CANARY</span>
+            <span class="chevron">▼</span>
+          </button>
+          <div id="themeMenu" class="theme-menu neo-card" role="menu">
+            <button class="theme-option active" data-theme="canary" role="menuitem">
+              <span class="color-dot dot-canary"></span> Canary Yellow
+            </button>
+            <button class="theme-option" data-theme="bubblegum" role="menuitem">
+              <span class="color-dot dot-bubblegum"></span> Bubblegum Pop
+            </button>
+            <button class="theme-option" data-theme="cyber" role="menuitem">
+              <span class="color-dot dot-cyber"></span> Cyber Acid
+            </button>
+            <button class="theme-option" data-theme="noir" role="menuitem">
+              <span class="color-dot dot-noir"></span> Dark Brutalism
+            </button>
+          </div>
+        </div>
+
+        <!-- History Tape Toggle -->
+        <button id="historyToggleBtn" class="neo-btn sm-btn history-btn" title="Toggle Calculation History Tape" aria-label="Toggle History">
+          <span class="icon">📜</span>
+          <span class="label">HISTORY</span>
+          <span id="historyCountBadge" class="count-badge">0</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Area -->
+    <main class="calculator-layout">
+      <!-- Calculator Main Body -->
+      <section class="calculator-card neo-card" aria-label="Neubrutalist Calculator">
+        <!-- Top Status Bar of Calculator -->
+        <div class="calc-status-bar">
+          <div class="status-left">
+            <span class="status-indicator"></span>
+            <span class="model-no">MOD: NC-980</span>
+          </div>
+          <div class="status-right">
+            <span id="memoryIndicator" class="memory-pill hidden">M-STORED</span>
+            <span class="rad-deg-pill">DEG</span>
+          </div>
+        </div>
+
+        <!-- Display Screen -->
+        <div class="screen-container">
+          <div class="screen-sub-bar">
+            <div id="expressionDisplay" class="screen-expression" aria-live="polite"></div>
+            <button id="copyBtn" class="screen-action-btn" title="Copy Current Value to Clipboard" aria-label="Copy to Clipboard">
+              <span id="copyIcon">📋</span>
+              <span id="copyFeedback" class="copy-tooltip">COPIED!</span>
+            </button>
+          </div>
+          <div class="screen-main">
+            <input 
+              type="text" 
+              id="mainDisplay" 
+              class="screen-output" 
+              value="0" 
+              readonly 
+              aria-label="Calculator Result" 
+              spellcheck="false" 
+              autocomplete="off"
+            />
+          </div>
+        </div>
+
+        <!-- Mode / Extended Functions Bar -->
+        <div class="functions-bar">
+          <button id="btnMC" class="neo-btn fn-btn" data-action="mc" title="Memory Clear">MC</button>
+          <button id="btnMR" class="neo-btn fn-btn" data-action="mr" title="Memory Recall">MR</button>
+          <button id="btnMPlus" class="neo-btn fn-btn" data-action="m-plus" title="Memory Add">M+</button>
+          <button id="btnMMinus" class="neo-btn fn-btn" data-action="m-minus" title="Memory Subtract">M-</button>
+          <button id="btnSqrt" class="neo-btn fn-btn" data-action="sqrt" title="Square Root">√x</button>
+          <button id="btnSquare" class="neo-btn fn-btn" data-action="square" title="Square">x²</button>
+        </div>
+
+        <!-- Keypad Grid -->
+        <div class="keypad-grid" role="grid" aria-label="Calculator Keypad">
+          <!-- Row 1: Reset & Math Functions -->
+          <button id="keyClearAll" class="neo-btn key-btn key-danger" data-action="clear-all" title="All Clear (Escape)">AC</button>
+          <button id="keyDelete" class="neo-btn key-btn key-warn" data-action="delete" title="Backspace / Delete (Backspace)">⌫</button>
+          <button id="keyPercent" class="neo-btn key-btn key-op-special" data-action="percent" title="Percentage (%)">%</button>
+          <button id="keyDivide" class="neo-btn key-btn key-operator" data-action="operator" data-value="÷" title="Divide (/)">÷</button>
+
+          <!-- Row 2: 7, 8, 9, Multiply -->
+          <button id="key7" class="neo-btn key-btn key-num" data-action="number" data-value="7">7</button>
+          <button id="key8" class="neo-btn key-btn key-num" data-action="number" data-value="8">8</button>
+          <button id="key9" class="neo-btn key-btn key-num" data-action="number" data-value="9">9</button>
+          <button id="keyMultiply" class="neo-btn key-btn key-operator" data-action="operator" data-value="×" title="Multiply (*)">×</button>
+
+          <!-- Row 3: 4, 5, 6, Subtract -->
+          <button id="key4" class="neo-btn key-btn key-num" data-action="number" data-value="4">4</button>
+          <button id="key5" class="neo-btn key-btn key-num" data-action="number" data-value="5">5</button>
+          <button id="key6" class="neo-btn key-btn key-num" data-action="number" data-value="6">6</button>
+          <button id="keySubtract" class="neo-btn key-btn key-operator" data-action="operator" data-value="-" title="Subtract (-)">−</button>
+
+          <!-- Row 4: 1, 2, 3, Add -->
+          <button id="key1" class="neo-btn key-btn key-num" data-action="number" data-value="1">1</button>
+          <button id="key2" class="neo-btn key-btn key-num" data-action="number" data-value="2">2</button>
+          <button id="key3" class="neo-btn key-btn key-num" data-action="number" data-value="3">3</button>
+          <button id="keyAdd" class="neo-btn key-btn key-operator" data-action="operator" data-value="+" title="Add (+)">+</button>
+
+          <!-- Row 5: Plus/Minus, 0, Decimal, Equals -->
+          <button id="keyNegate" class="neo-btn key-btn key-num" data-action="negate" title="Negate / Toggle Sign (+/-)">±</button>
+          <button id="key0" class="neo-btn key-btn key-num" data-action="number" data-value="0">0</button>
+          <button id="keyDecimal" class="neo-btn key-btn key-num" data-action="decimal" title="Decimal Point (.)">.</button>
+          <button id="keyEquals" class="neo-btn key-btn key-action" data-action="calculate" title="Calculate Result (Enter)">=</button>
+        </div>
+
+        <!-- Bottom Tag -->
+        <div class="calc-footer">
+          <span>⌨ KEYBOARD ENABLED</span>
+          <span class="dot-separator">•</span>
+          <span>PRESS [ENTER] TO SOLVE</span>
+        </div>
+      </section>
+
+      <!-- History Tape Drawer / Side Panel -->
+      <aside id="historyPanel" class="history-panel neo-card" aria-label="Calculation History Tape">
+        <div class="history-header">
+          <div class="history-title">
+            <span class="tape-icon">🧾</span>
+            <h2>PAPER TAPE</h2>
+          </div>
+          <div class="history-actions">
+            <button id="clearHistoryBtn" class="neo-btn sm-btn danger-outline" title="Clear all calculations">CLEAR</button>
+            <button id="closeHistoryBtn" class="neo-btn sm-btn icon-only" title="Close Panel" aria-label="Close History">✕</button>
+          </div>
+        </div>
+
+        <div class="tape-serrated-edge" aria-hidden="true"></div>
+
+        <div id="historyList" class="history-list" role="list">
+          <!-- Injected via JavaScript -->
+          <div class="history-empty">
+            <div class="empty-emoji">📝</div>
+            <p><strong>Tape is empty!</strong></p>
+            <span>Run a calculation and your tape receipt will print here.</span>
+          </div>
+        </div>
+
+        <div class="tape-footer">
+          <span class="receipt-code">TAPE REF #NEO-2026</span>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Keyboard Shortcuts Helper Modal / Collapsible Footer Guide -->
+    <footer class="app-footer">
+      <div class="shortcuts-guide neo-card">
+        <span class="guide-title">QUICK KEYS:</span>
+        <div class="shortcut-pills">
+          <span class="kbd-pill"><kbd>0-9</kbd> Digits</span>
+          <span class="kbd-pill"><kbd>+</kbd> <kbd>-</kbd> <kbd>*</kbd> <kbd>/</kbd> Ops</span>
+          <span class="kbd-pill"><kbd>Enter</kbd> or <kbd>=</kbd> Solve</span>
+          <span class="kbd-pill"><kbd>Backspace</kbd> Delete</span>
+          <span class="kbd-pill"><kbd>Esc</kbd> Clear</span>
+          <span class="kbd-pill"><kbd>%</kbd> Percent</span>
+        </div>
+      </div>
+      <p class="copyright-note">DESIGNED WITH ⚡ IN RAW NEUBRUTALISM STYLE</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
